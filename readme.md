@@ -8,7 +8,7 @@ The images used in this repo is `php:7.2-apache` and `mysql:5.7`. The goal is to
 ## Up and running
 Clone the repo:
 ```
-$ git clone https://github.com/chbharathkumar/laravel-apache-docker.git
+$ git clone https://github.com/suresh8147/laravel-apache-docker.git
 $ cd laravel-apache-docker
 ```
 Next, use Docker’s composer image to mount the directories that you will need for your Laravel project and avoid the overhead of installing Composer globally:
