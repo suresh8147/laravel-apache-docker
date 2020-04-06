@@ -29,20 +29,20 @@ $ docker-compose up -d
 ```
 ## After Build
 Once the process is complete, use the following command to list all of the running containers:
-
+```
 $ docker ps
-
+```
 We’ll now use docker-compose exec to set the application key for the Laravel application. The  docker-compose exec command allows you to run specific commands in containers.
 
 The following command will generate a key and copy it to your .env file, ensuring that your user sessions and encrypted data remain secure:
 
-
+```
 $ docker-compose exec laravel-app php artisan key:generate
-
+```
 You now have the environment settings required to run your application. To cache these settings into a file, which will boost your application’s load speed, run:
-
+```
 $ docker-compose exec laravel-app php artisan config:cache
-
+```
 
 Your configuration settings will be loaded into /var/www/bootstrap/cache/config.php on the container.
 
