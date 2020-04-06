@@ -8,10 +8,15 @@ The images used in this repo is `php:7.2-apache` and `mysql:5.7`. The goal is to
 ## Up and running
 Clone the repo:
 ```
-$ git clone https://github.com/laravel/laravel.git
-$ cd laravel
+$ git clone https://github.com/chbharathkumar/laravel-apache-docker.git
+$ cd laravel-apache-docker
 ```
-
+Next, use Docker’s composer image to mount the directories that you will need for your Laravel project and avoid the overhead of installing Composer globally:
+$ docker run --rm -v $(pwd):/app composer install
+```
+As a final step, set permissions on the project directory
+$ sudo chown -R ~/laravel-apache-docker
+```
 Copy `.env.example` to `.env`
 ```
 $ cp .env.example .env 
@@ -19,59 +24,28 @@ $ cp .env.example .env
 
 Build the images and start the services:
 ```
-docker-compose build
-docker-compose up -d
+$ docker-compose build
+$ docker-compose up -d
 ```
+## After Build
+Once the process is complete, use the following command to list all of the running containers:
 
-## Helper scripts
-Running `composer`, `php artisan` or `phpunit` against the `php` container with helper scripts in the main directory:
+$ docker ps
 
-### container
-Running `./container` takes you inside the `laravel-app` container under user uid(1000) (same with host user)
-```
-$ ./container
-devuser@8cf37a093502:/var/www/html$
-```
-### db
-Running `./db` connects to your database container's daemon using mysql client.
-```
-$ ./db
-mysql>
-```
+We’ll now use docker-compose exec to set the application key for the Laravel application. The  docker-compose exec command allows you to run specific commands in containers.
 
-### composer
-Run `composer` command, example:
-```
-$ ./composer dump-autoload
-Generating optimized autoload files> Illuminate\Foundation\ComposerScripts::postAutoloadDump
-> @php artisan package:discover --ansi
-Discovered Package: beyondcode/laravel-dump-server
-Discovered Package: fideloper/proxy
-Discovered Package: laravel/tinker
-Discovered Package: nesbot/carbon
-Discovered Package: nunomaduro/collision
-Package manifest generated successfully.
-Generated optimized autoload files containing 3527 classes
-```
-
-### php-artisan
-Run `php artisan` commands, example:
-```
-$ ./php-artisan make:controller BlogPostController --resource
-php artisan make:controller BlogPostController --resource
-Controller created successfully.
-```
-
-### phpunit
-Run `./vendor/bin/phpunit` to execute tests, example:
-```
-$ ./phpunit --group=failing
-vendor/bin/phpunit --group=failing
-PHPUnit 7.5.8 by Sebastian Bergmann and contributors.
+The following command will generate a key and copy it to your .env file, ensuring that your user sessions and encrypted data remain secure:
 
 
+$ docker-compose exec laravel-app php artisan key:generate
 
-Time: 34 ms, Memory: 6.00 MB
+You now have the environment settings required to run your application. To cache these settings into a file, which will boost your application’s load speed, run:
 
-No tests executed!
-```
+$ docker-compose exec laravel-app php artisan config:cache
+
+
+Your configuration settings will be loaded into /var/www/bootstrap/cache/config.php on the container.
+
+As a final step, visit http://your_server_ip in the browser.
+
+
