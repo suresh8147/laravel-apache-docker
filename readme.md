@@ -12,9 +12,11 @@ $ git clone https://github.com/chbharathkumar/laravel-apache-docker.git
 $ cd laravel-apache-docker
 ```
 Next, use Docker’s composer image to mount the directories that you will need for your Laravel project and avoid the overhead of installing Composer globally:
+```
 $ docker run --rm -v $(pwd):/app composer install
 ```
 As a final step, set permissions on the project directory
+```
 $ sudo chown -R ~/laravel-apache-docker
 ```
 Copy `.env.example` to `.env`
